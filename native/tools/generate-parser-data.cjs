@@ -12,9 +12,15 @@ const entityAst = parser.parse(entitySource);
 const entities = {};
 const context = vm.createContext({});
 const nativeEntityRules = {
-  accountRules: [/\bAxis Bank\b.{0,60}?\b((?:A\/c|A\/C|Acct|Account)\s+no\.?\s*[Xx*.]*\d+)\b/i],
+  accountRules: [
+    /\bAxis Bank\b.{0,60}?\b((?:A\/c|A\/C|Acct|Account)\s+no\.?\s*[Xx*.]*\d+)\b/i,
+    /\b(Kotak Bank\s+AC\s+[Xx*.\d]+)\b/i,
+  ],
   debitToRules: [/\b(UPI\/P2M\/\d{12,13}\/[A-Z0-9 .@_*/:-]{2,80}?)(?=\s+Not you\?|\s+SMS\s+BLOCK|\s+-?\s*Axis Bank|$)/i],
-  creditFromRules: [/\b(UPI\/P2A\/\d{12,13}\/[A-Z0-9 .@_*/:-]{2,80}?\/UPI)(?=\s*-\s*Axis Bank|$)/i],
+  creditFromRules: [
+    /\bKotak Bank\b.{0,100}?\bfrom\s+([A-Z0-9 .@_*/:-]{2,80}?)(?=\s+on\s+\d{1,2}-\d{1,2}-\d{2,4}\b)/i,
+    /\b(UPI\/P2A\/\d{12,13}\/[A-Z0-9 .@_*/:-]{2,80}?\/UPI)(?=\s*-\s*Axis Bank|$)/i,
+  ],
 };
 traverse(entityAst, {
   VariableDeclarator(p) {

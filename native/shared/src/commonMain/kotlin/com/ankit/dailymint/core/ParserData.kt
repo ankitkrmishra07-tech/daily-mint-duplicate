@@ -47,6 +47,7 @@ internal object ParserData {
         Regex("\\b(?:credit|debit)\\s+card\\b[\\s\\S]*\\blandmark\\s+rewards?\\b[\\s\\S]*\\b(?:switch\\s+now|apply\\s+now|offer|t&c|terms)\\b", RegexOption.IGNORE_CASE),
         Regex("\\b(?:get|earn)\\s+cashback\\s+on\\s+every\\s+(?:rs\\.?|inr)\\s*[\\d,.]+\\s+spent\\b", RegexOption.IGNORE_CASE))
     val accountRules = listOf(Regex("\\bAxis Bank\\b.{0,60}?\\b((?:A\\/c|A\\/C|Acct|Account)\\s+no\\.?\\s*[Xx*.]*\\d+)\\b", RegexOption.IGNORE_CASE),
+        Regex("\\b(Kotak Bank\\s+AC\\s+[Xx*.\\d]+)\\b", RegexOption.IGNORE_CASE),
         Regex("\\b(IndusInd\\s+(?:A\\/C|Account)\\s+[Xx*.\\d]+)\\b", RegexOption.IGNORE_CASE),
         Regex("\\bfrom\\s+((?:[A-Z]+\\s+)?(?:Bank\\s+)?(?:A\\/c|A\\/C|Acct|Account|Card|Credit Card)\\s*[Xx*.\\d]+)\\b", RegexOption.IGNORE_CASE),
         Regex("\\bfrom\\s+((?:[A-Z][A-Za-z&.]+(?:\\s+[A-Z][A-Za-z&.]+){0,5}\\s+Bank|Bank\\s+of\\s+[A-Z][A-Za-z]+(?:\\s+[A-Z][A-Za-z]+){0,4}|[A-Z]{2,8})[A-Z\\s]*\\s+(?:A\\/c|A\\/C|Acct|Account|Card|Credit Card)\\s*[Xx*.\\d]+)\\b", RegexOption.IGNORE_CASE),
@@ -71,7 +72,8 @@ internal object ParserData {
         Regex("\\bfor\\s+((?:NEFT|IMPS|RTGS)\\s+txn(?:\\s+via\\s+[A-Z0-9 .@_*/:-]{2,80}?)?)(?=\\s+Not you|\\s+Call|\\.|\$)", RegexOption.IGNORE_CASE),
         Regex("\\bfor\\s+(?!INR\\b|Rs\\.?\\b|₹)([A-Z0-9 .@_*/:-]{2,80}?)(?:\\.| To dispute|\$)", RegexOption.IGNORE_CASE),
         Regex("\\bfor\\s+UPI-\\d+-([A-Z][A-Z .]{2,80}?)(?:\\.| To dispute|\$)", RegexOption.IGNORE_CASE))
-    val creditFromRules = listOf(Regex("\\b(UPI\\/P2A\\/\\d{12,13}\\/[A-Z0-9 .@_*/:-]{2,80}?\\/UPI)(?=\\s*-\\s*Axis Bank|$)", RegexOption.IGNORE_CASE),
+    val creditFromRules = listOf(Regex("\\bKotak Bank\\b.{0,100}?\\bfrom\\s+([A-Z0-9 .@_*/:-]{2,80}?)(?=\\s+on\\s+\\d{1,2}-\\d{1,2}-\\d{2,4}\\b)", RegexOption.IGNORE_CASE),
+        Regex("\\b(UPI\\/P2A\\/\\d{12,13}\\/[A-Z0-9 .@_*/:-]{2,80}?\\/UPI)(?=\\s*-\\s*Axis Bank|$)", RegexOption.IGNORE_CASE),
         Regex("\\([^)]*\\/([A-Z][A-Z .]{2,80})\\)", RegexOption.IGNORE_CASE),
         Regex("\\bfrom\\s+((?:A\\/c|a\\/c|Acct|Account)\\s+no\\.?\\s*[Xx*.]*\\d+)\\b", RegexOption.IGNORE_CASE),
         Regex("\\bfrom\\s+([A-Z0-9 .@_*/:-]{2,80}?)(?:\\s+Ref|\\s+UPI|\\.|\$)", RegexOption.IGNORE_CASE),

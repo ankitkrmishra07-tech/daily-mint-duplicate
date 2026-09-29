@@ -86,4 +86,27 @@ class BankSmsParserTest {
         assertEquals("UPI/P2M/900000000201/SAMPLE MERCHANT UBR", debitEntry.name)
         assertEquals("UPI/P2A/900000000202/SAMPLE PAYER/UTIB/UPI", creditEntry.name)
     }
+
+    @Test fun kotakCreditCounterpartyStopsBeforeTransactionDate() {
+        val debitSms = "Sent Rs.432.00 from Kotak Bank AC XXXXX to sample.payee@kotak811 on 28-02-26.UPI Ref 900000000301. Not you, https://kotak.com/KBANKT/Fraud"
+        val creditSms = "Received Rs.163.00 in your Kotak Bank AC XXXXX from sample.payer@ptyes on 03-03-26.UPI Ref:900000000302."
+
+        val debit = BankSmsParser.parse(debitSms, minimumConfidence = 75)
+        assertTrue(debit.parsed)
+        assertEquals(43200, debit.paise)
+        assertEquals("debit", debit.direction)
+        assertEquals("Kotak Bank AC XXXXX", debit.from)
+        assertEquals("sample.payee@kotak811", debit.to)
+        assertEquals("900000000301", debit.referenceId)
+        assertEquals("Kotak Mahindra Bank", debit.bank)
+
+        val credit = BankSmsParser.parse(creditSms, minimumConfidence = 75)
+        assertTrue(credit.parsed)
+        assertEquals(16300, credit.paise)
+        assertEquals("credit", credit.direction)
+        assertEquals("sample.payer@ptyes", credit.from)
+        assertEquals("Kotak Bank AC XXXXX", credit.to)
+        assertEquals("900000000302", credit.referenceId)
+        assertEquals("Kotak Mahindra Bank", credit.bank)
+    }
 }

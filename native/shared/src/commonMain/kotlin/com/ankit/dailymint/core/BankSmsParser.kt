@@ -65,6 +65,7 @@ object BankSmsParser {
             .minByOrNull { it.second }?.first
     }
     private fun reference(text: String): String? = listOf(
+        """\bUPI\s+Ref(?:\s+(?:ID|No))?\s*[:#-]?\s*([A-Z0-9]{8,40})\b""",
         """\bRef\s*[:#-]\s*([A-Z][A-Z0-9]{8,40})\b""",
         """\bRRN\s*[:#-]?\s*(\d{12,13})\b""",
         """\b(?:UPI\s+Ref\s+ID|UPI\s+Ref\s+No|Ref|Refno|Ref\s+No|UPI)\s*[:#-]?\s*(\d{12})\b""",
