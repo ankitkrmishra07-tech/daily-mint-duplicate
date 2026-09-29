@@ -78,7 +78,7 @@ object BankSmsParser {
             .replace(Regex("""^Dear\s+UPI\s+user\s+""", RegexOption.IGNORE_CASE), "")
             .replace(Regex("""^your\s+""", RegexOption.IGNORE_CASE), "")
             .replace(Regex("""[.;]+$"""), "").trim()
-        if (cleaned.isEmpty() || Regex("""^UPI(?:\s+Ref)?|^account$|^\d{8,}$|^[A-Z][A-Za-z&.]+\s+(?:A/C|Account)$|^(?:report(?: an)? issue|report fraud|block|call)\b""", RegexOption.IGNORE_CASE).containsMatchIn(cleaned)) return null
+        if (cleaned.isEmpty() || Regex("""^UPI(?!/)|^account$|^\d{8,}$|^[A-Z][A-Za-z&.]+\s+(?:A/C|Account)$|^(?:report(?: an)? issue|report fraud|block|call)\b""", RegexOption.IGNORE_CASE).containsMatchIn(cleaned)) return null
         Regex("""^(?:a/c|acct|account)\s+no\.?\s*[Xx*.]*(\d{3,4})$""", RegexOption.IGNORE_CASE).find(cleaned)?.let { return "A/c " + it.groupValues[1] }
         return cleaned
     }

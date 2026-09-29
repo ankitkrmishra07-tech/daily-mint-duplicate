@@ -59,4 +59,31 @@ class BankSmsParserTest {
         assertEquals(50100, debitEntry.paise)
         assertEquals(50000, creditEntry.paise)
     }
+
+    @Test fun axisSlashDelimitedUpiDescriptorsStayIntact() {
+        val debitSms = "Axis Bank INR 1100.00 debited A/c no. XX2309 09-09-26, 09:28:47 UPI/P2M/900000000201/SAMPLE MERCHANT UBR Not you? SMS BLOCKUPI Cust ID to 919951860002 Axis Bank"
+        val creditSms = "Axis Bank INR 5000.00 credited A/c no. XX2309 02-09-26, 11:18:06 IST UPI/P2A/900000000202/SAMPLE PAYER/UTIB/UPI - Axis Bank"
+
+        val debit = BankSmsParser.parse(debitSms, minimumConfidence = 75)
+        assertTrue(debit.parsed)
+        assertEquals(110000, debit.paise)
+        assertEquals("debit", debit.direction)
+        assertEquals("A/c 2309", debit.from)
+        assertEquals("UPI/P2M/900000000201/SAMPLE MERCHANT UBR", debit.to)
+        assertEquals("900000000201", debit.referenceId)
+
+        val credit = BankSmsParser.parse(creditSms, minimumConfidence = 75)
+        assertTrue(credit.parsed)
+        assertEquals(500000, credit.paise)
+        assertEquals("credit", credit.direction)
+        assertEquals("UPI/P2A/900000000202/SAMPLE PAYER/UTIB/UPI", credit.from)
+        assertEquals("A/c 2309", credit.to)
+        assertEquals("900000000202", credit.referenceId)
+
+        val snapshot = Snapshot()
+        val debitEntry = TransactionImport.sms(debitSms, "", "2026-09-09T03:58:47Z", 1, snapshot).entry!!
+        val creditEntry = TransactionImport.sms(creditSms, "", "2026-09-02T05:48:06Z", 2, snapshot).entry!!
+        assertEquals("UPI/P2M/900000000201/SAMPLE MERCHANT UBR", debitEntry.name)
+        assertEquals("UPI/P2A/900000000202/SAMPLE PAYER/UTIB/UPI", creditEntry.name)
+    }
 }
